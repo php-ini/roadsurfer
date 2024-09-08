@@ -20,6 +20,7 @@ use Roadsurfer\FoodBundle\Service\FoodCollectionService;
 )]
 class FoodJsonProcessCommand extends Command
 {
+    private const DEFAULT_JSON_PATH = 'src/DataFixtures/request.json';
     protected static string $defaultName = 'roadsurfer:food-json-process';
     protected static string $defaultDescription = 'Tests the Food processing a JSON file with the CollectionService.';
 
@@ -34,7 +35,12 @@ class FoodJsonProcessCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('jsonFilePath', InputArgument::REQUIRED, 'The path to the JSON file to process.')
+            ->addArgument(
+                'jsonFilePath',
+                InputArgument::OPTIONAL,
+                'The path to the JSON file to process.',
+                self::DEFAULT_JSON_PATH // Set default value here
+            )
             ->addOption('output', 'o', InputOption::VALUE_NONE, 'Whether to output the contents of the collections after processing.');
     }
 
@@ -44,7 +50,7 @@ class FoodJsonProcessCommand extends Command
         $jsonFilePath = $input->getArgument('jsonFilePath');
 
         if (!file_exists($jsonFilePath)) {
-            $io->error('The specified JSON file does not exist.');
+            $io->error('The specified JSON file does not exist: ' . $jsonFilePath);
             return Command::FAILURE;
         }
 
@@ -55,13 +61,11 @@ class FoodJsonProcessCommand extends Command
             return Command::FAILURE;
         }
 
-        $foodCollectionService = $this->foodCollectionService;
-
-        $foodCollectionService->processJson($jsonData);
+        $this->foodCollectionService->processJson($jsonData);
 
         if ($input->getOption('output')) {
-            $fruits = $foodCollectionService->getFruits();
-            $vegetables = $foodCollectionService->getVegetables();
+            $fruits = $this->foodCollectionService->getFruits();
+            $vegetables = $this->foodCollectionService->getVegetables();
             $io->success('Fruits and Vegetables processed successfully.');
             $io->listing([
                 'Fruits: ' . count($fruits),
