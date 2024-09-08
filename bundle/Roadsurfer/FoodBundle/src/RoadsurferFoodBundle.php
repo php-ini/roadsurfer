@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Roadsurfer\FoodBundle;
 
+use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Roadsurfer\FoodBundle\DependencyInjection\RoadsurferFoodBundleExtension;
 
-class RoadsurferFoodBundle extends Bundle
+class RoadsurferFoodBundle extends AbstractBundle
 {
     public function getPath(): string
     {

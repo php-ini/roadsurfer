@@ -1,5 +1,5 @@
 {
-  "name": "roadsurder/food-bundle",
+  "name": "roadsurfer/food-bundle",
   "version": "1.0.0",
   "type": "symfony-bundle",
   "description": "A custom bundle to handle foods in an API",
