@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace Roadsurfer\FoodBundle\Command;
 
+use Roadsurfer\FoodBundle\Service\FoodCollectionService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Console\Input\InputOption;
-use Roadsurfer\FoodBundle\Service\FoodCollectionService;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 #[AsCommand(
     name: 'roadsurfer:food-json-process',
@@ -20,26 +21,27 @@ use Roadsurfer\FoodBundle\Service\FoodCollectionService;
 )]
 class FoodJsonProcessCommand extends Command
 {
-    private const DEFAULT_JSON_PATH = 'src/DataFixtures/request.json';
     protected static string $defaultName = 'roadsurfer:food-json-process';
     protected static string $defaultDescription = 'Tests the Food processing a JSON file with the CollectionService.';
 
-    private FoodCollectionService $foodCollectionService;
-
-    public function __construct(FoodCollectionService $foodCollectionService)
+    public function __construct(
+        private readonly FoodCollectionService $foodCollectionService,
+        private readonly ParameterBagInterface $parameterBag
+    )
     {
-        $this->foodCollectionService = $foodCollectionService;
         parent::__construct();
     }
 
     protected function configure(): void
     {
+        $defaultJsonFilePath = $this->parameterBag->get('default_food_json_file_path');
+
         $this
             ->addArgument(
                 'jsonFilePath',
                 InputArgument::OPTIONAL,
                 'The path to the JSON file to process.',
-                self::DEFAULT_JSON_PATH // Set default value here
+                $defaultJsonFilePath
             )
             ->addOption('output', 'o', InputOption::VALUE_NONE, 'Whether to output the contents of the collections after processing.');
     }
