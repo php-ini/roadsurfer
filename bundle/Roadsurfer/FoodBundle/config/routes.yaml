@@ -1,0 +1,7 @@
+roadsurfer_food_bundle.routes:
+    resource: ../src/Controller/
+    type: annotation
+
+roadsurfer_food_api_bundle.routes:
+    resource: ../src/Controller/Api
+    type: annotation
