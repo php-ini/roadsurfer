@@ -12,7 +12,9 @@
     }
   ],
   "require": {
-    "php": ">=8.2"
+    "php": ">=8.2",
+    "symfony/framework-bundle": "^7.1",
+    "symfony/validator": "^7.1"
   },
   "autoload": {
     "psr-4": {
@@ -38,5 +40,10 @@
     "issues": "https://github.com/composer/composer/issues",
     "irc": "ircs://irc.libera.chat:6697/composer",
     "security": "https://github.com/composer/composer/security/policy"
+  },
+  "extra": {
+    "symfony": {
+      "allow-contrib": false
+    }
   }
 }
