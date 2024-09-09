@@ -88,7 +88,7 @@ class FoodJsonProcessCommand extends Command
     private function formatItemsForOutput(array $items): array
     {
         return array_map(function ($item) {
-            return [$item['id'], $item['name'], $item['type'], $item['quantity']];
+            return [$item->getId(), $item->getName(), $item->getType(), $item->getQuantity()];
         }, $items);
     }
 }

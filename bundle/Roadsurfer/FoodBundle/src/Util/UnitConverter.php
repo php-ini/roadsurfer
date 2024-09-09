@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Roadsurfer\FoodBundle\Util;
 
 use Roadsurfer\FoodBundle\Enum\UnitType;
 
 class UnitConverter
 {
-    public static function convertToGrams(array $item): array
+    public static function convertToGrams(array $item): int
     {
         $unitType = UnitType::tryFrom($item['unit']);
 
@@ -14,6 +16,6 @@ class UnitConverter
             $item['quantity'] *= 1000;
         }
 
-        return $item;
+        return $item['quantity'];
     }
 }

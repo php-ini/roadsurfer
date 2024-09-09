@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Roadsurfer\FoodBundle\Command;
 
-use Roadsurfer\FoodBundle\Entity\Food;
 use Doctrine\ORM\EntityManagerInterface;
+use Roadsurfer\FoodBundle\Entity\Food;
 use Roadsurfer\FoodBundle\Enum\FoodType;
 use Roadsurfer\FoodBundle\Enum\UnitType;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -49,10 +49,15 @@ class ImportJsonCommand extends Command
         $jsonFilePath = $input->getArgument('jsonFilePath');
 
         $jsonData = json_decode(file_get_contents($jsonFilePath), true);
+
         if (json_last_error() !== JSON_ERROR_NONE) {
             $io->error('Failed to decode JSON: ' . json_last_error_msg());
             return Command::FAILURE;
         }
+
+        // TODO: Must refactor below to follow separation of concerns and to be testable
+
+        $foodRepository = new \Roadsurfer\FoodBundle\Repository\InMemoryFoodRepository();
 
         foreach ($jsonData as $item) {
             $food = new Food();
@@ -61,7 +66,7 @@ class ImportJsonCommand extends Command
             try {
                 $foodType = FoodType::from($item['type']);
             } catch (\ValueError $e) {
-                $io->error("Invalid food type: " . $item['type']);
+                $io->error("Invalid food type: " . $item['type'] . PHP_EOL . $e->getMessage());
                 continue;
             }
 
@@ -72,13 +77,14 @@ class ImportJsonCommand extends Command
             try {
                 UnitType::from($item['unit']);
             } catch (\ValueError $e) {
-                $io->error("Invalid unit type: " . $item['unit']);
+                $io->error("Invalid unit type: " . $item['unit']. PHP_EOL . $e->getMessage());
                 continue;
             }
 
             $food->setUnit(UnitType::Gram);
 
             $errors = $this->validator->validate($food);
+
             if (count($errors) > 0) {
                 foreach ($errors as $error) {
                     $io->error($error->getMessage());

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Roadsurfer\FoodBundle\Service;
 
+use Roadsurfer\FoodBundle\Dto\FruitsDto;
 use Roadsurfer\FoodBundle\Enum\FoodType;
+use Roadsurfer\FoodBundle\Dto\VegetablesDto;
 use Roadsurfer\FoodBundle\Util\UnitConverter;
 use Roadsurfer\FoodBundle\Collection\FruitsCollection;
 use Roadsurfer\FoodBundle\Collection\VegetablesCollection;
@@ -25,10 +27,24 @@ readonly class FoodCollectionService
 
             switch ($itemType) {
                 case FoodType::Fruit:
-                    $this->fruitsCollection->add(UnitConverter::convertToGrams($item));
+
+                    $fruitsDto = new FruitsDto(
+                        $item['id'],
+                        $item['name'],
+                        UnitConverter::convertToGrams($item),
+                        $item['unit']
+                    );
+                    $this->fruitsCollection->add($fruitsDto);
                     break;
                 case FoodType::Vegetable:
-                    $this->vegetablesCollection->add(UnitConverter::convertToGrams($item));
+
+                    $vegetableDto = new VegetablesDto(
+                        $item['id'],
+                        $item['name'],
+                        UnitConverter::convertToGrams($item),
+                        $item['unit']
+                    );
+                    $this->vegetablesCollection->add($vegetableDto);
                     break;
             }
         }

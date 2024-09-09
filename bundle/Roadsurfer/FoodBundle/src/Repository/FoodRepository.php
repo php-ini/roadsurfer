@@ -2,14 +2,14 @@
 
 namespace Roadsurfer\FoodBundle\Repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Roadsurfer\FoodBundle\Entity\Food;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Food>
  */
-class FoodRepository extends ServiceEntityRepository
+class FoodRepository extends ServiceEntityRepository implements FoodRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -40,4 +40,8 @@ class FoodRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function save(): void
+    {
+        // TODO: Implement save() method.
+    }
 }
