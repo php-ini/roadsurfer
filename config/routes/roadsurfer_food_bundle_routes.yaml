@@ -1,0 +1,5 @@
+#roadsurfer_food_bundle.routes:
+#  resource: '@RoadsurferFoodBundle/config/routes.yaml'
+
+roadsurfer_food_api_bundle.routes:
+  resource: '@RoadsurferFoodBundle/config/routes.yaml'

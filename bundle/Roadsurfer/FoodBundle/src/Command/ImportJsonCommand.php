@@ -57,8 +57,6 @@ class ImportJsonCommand extends Command
 
         // TODO: Must refactor below to follow separation of concerns and to be testable
 
-        $foodRepository = new \Roadsurfer\FoodBundle\Repository\InMemoryFoodRepository();
-
         foreach ($jsonData as $item) {
             $food = new Food();
             $food->setName($item['name']);

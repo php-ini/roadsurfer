@@ -11,7 +11,7 @@ abstract class FoodDto implements FoodDtoInterface
     public function __construct(
         private readonly int    $id,
         private readonly string $name,
-        private readonly float  $quantity,
+        private readonly int  $quantity,
         private readonly string $unit
     ) {
     }

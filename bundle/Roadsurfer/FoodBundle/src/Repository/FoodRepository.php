@@ -5,6 +5,7 @@ namespace Roadsurfer\FoodBundle\Repository;
 use Roadsurfer\FoodBundle\Entity\Food;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Roadsurfer\FoodBundle\Enum\UnitType;
 
 /**
  * @extends ServiceEntityRepository<Food>
@@ -40,8 +41,53 @@ class FoodRepository extends ServiceEntityRepository implements FoodRepositoryIn
     //            ->getOneOrNullResult()
     //        ;
     //    }
-    public function save(): void
+    public function save(Food $entity, $flush = true): void
     {
-        // TODO: Implement save() method.
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Food $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function search(
+        ?string $name,
+        ?string $type,
+        ?int $minQuantity,
+        ?int $maxQuantity
+    ): array
+    {
+        $qb = $this->createQueryBuilder('f');
+
+        if ($name) {
+            $qb->andWhere('f.name LIKE :name')
+                ->setParameter('name', '%' . $name . '%');
+        }
+
+        if ($type) {
+            $qb->andWhere('f.type = :type')
+                ->setParameter('type', $type);
+        }
+
+        if ($minQuantity) {
+            $qb->andWhere('f.quantity >= :minQuantity')
+                ->setParameter('minQuantity', $minQuantity);
+        }
+
+        if ($maxQuantity) {
+            $qb->andWhere('f.quantity <= :maxQuantity')
+                ->setParameter('maxQuantity', $maxQuantity);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }

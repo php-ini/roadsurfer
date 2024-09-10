@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Roadsurfer\FoodBundle\Repository;
 
+use Roadsurfer\FoodBundle\Entity\Food;
+
 class InMemoryFoodRepository implements FoodRepositoryInterface
 {
     public function find()
@@ -11,7 +13,7 @@ class InMemoryFoodRepository implements FoodRepositoryInterface
         // TODO: Implement find() method.
     }
 
-    public function save(): void
+    public function save(Food $food, bool $flush): void
     {
         // TODO: Implement save() method.
     }
@@ -24,5 +26,10 @@ class InMemoryFoodRepository implements FoodRepositoryInterface
     public function findBy(string $key, string $value): array
     {
         return [];
+    }
+
+    public function remove(Food $food, bool $flush): void
+    {
+        // TODO: Implement remove() method.
     }
 }

@@ -1,7 +1,9 @@
-roadsurfer_food_bundle.routes:
-    resource: ../src/Controller/
-    type: annotation
-
-#roadsurfer_food_api_bundle.routes:
-#    resource: ../src/Controller/Api
+#roadsurfer_food_bundle.routes:
+#    resource: ../src/Controller/
 #    type: annotation
+
+roadsurfer_food_api_bundle.routes:
+    resource:
+        path: ../src/Controller/Api/
+        namespace: Roadsurfer\FoodBundle\Controller\Api
+    type: attribute

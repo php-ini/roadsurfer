@@ -32,16 +32,13 @@ class Food
     #[Assert\Choice(choices: [UnitType::Gram, UnitType::Kilogram], message: 'Choose a valid unit type.')]
     private ?UnitType $unit = null;
 
-    #[ORM\Column(type: "datetime", nullable: false, insertable: false)]
-    #[Assert\DateTime]
+    #[ORM\Column(type: "datetime_immutable", nullable: false, insertable: false)]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(nullable: true)]
-    #[Assert\DateTime]
     private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\Column(nullable: true)]
-    #[Assert\DateTime]
     private ?\DateTimeImmutable $deleted_at = null;
 
     public function getId(): ?int
@@ -138,8 +135,22 @@ class Food
      */
     public function prePersist(): void
     {
-        if (!$this->createdAt) {
-            $this->createdAt = new \DateTime();
+        if (!$this->created_at) {
+            $this->created_at = new \DateTimeImmutable();
         }
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'type' => $this->type,
+            'quantity' => $this->quantity,
+            'unit' => $this->unit,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'deleted_at' => $this->deleted_at,
+        ];
     }
 }

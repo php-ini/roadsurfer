@@ -23,10 +23,19 @@ services:
 
     Roadsurfer\FoodBundle\Command\ImportJsonCommand: ~
 
+    Roadsurfer\FoodBundle\Repository\FoodRepository: ~
+
+    Roadsurfer\FoodBundle\Dto\Response\Transformer\FoodResponseDtoTransformer: ~
+
+    Roadsurfer\FoodBundle\Factory\FoodFactory: ~
+
+    Roadsurfer\FoodBundle\Service\FoodService: ~
+
 
     #----------
     # API V1
     #----------
 
+    Roadsurfer\FoodBundle\Controller\Api\FoodApiController: ~
 
 
