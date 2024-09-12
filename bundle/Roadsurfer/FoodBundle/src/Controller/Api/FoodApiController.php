@@ -35,7 +35,7 @@ class FoodApiController extends AbstractApiController
     {
         $foods = $this->foodRepository->findAll();
 
-        $unit = $request->query->get('unit', UnitType::Gram->value);
+        $unit = UnitType::tryFrom($request->query->get('unit', UnitType::Gram->value));
 
         $dto = $this->foodResponseDtoTransformer->transformFromObjects($foods, $unit);
 
@@ -47,7 +47,7 @@ class FoodApiController extends AbstractApiController
     {
         $name = $request->query->get('name');
         $type = $request->query->get('type');
-        $unit = $request->query->get('unit', UnitType::Gram->value);
+        $unit = UnitType::tryFrom($request->query->get('unit', UnitType::Gram->value));
         $minQuantity = (int)$request->query->get('min_quantity', 0);
         $maxQuantity = (int)$request->query->get('max_quantity', 1000);
 
@@ -79,7 +79,7 @@ class FoodApiController extends AbstractApiController
             return $this->respond($data, Response::HTTP_NOT_FOUND);
         }
 
-        $unit = $request->query->get('unit', UnitType::Gram->value);
+        $unit = UnitType::tryFrom($request->query->get('unit', UnitType::Gram->value));
 
         $foodDto = $this->foodResponseDtoTransformer->transformFromObject($food, $unit);
 
@@ -102,13 +102,9 @@ class FoodApiController extends AbstractApiController
 
             if (count($errors) === 0) {
 
-                $this->foodRepository->save($foodEntity, true);
+                $foodEntity = $this->foodRepository->save($foodEntity, true);
 
-                $data = [
-                    'success' => "Food created successfully",
-                ];
-
-                return $this->respond($data);
+                return $this->respond($foodEntity->toArray(), Response::HTTP_CREATED);
             }
 
             return $this->respond(['error' => $errors], Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -149,13 +145,9 @@ class FoodApiController extends AbstractApiController
             $errors = $validator->validate($foodEntity);
 
             if (count($errors) === 0) {
-                $this->foodRepository->save($foodEntity);
-                $data = [
-                    'status' => self::STATUS_SUCCESS,
-                    'success' => "Food updated successfully",
-                ];
+                $foodEntity = $this->foodRepository->save($foodEntity);
 
-                return $this->respond($data);
+                return $this->respond($foodEntity->toArray());
             }
 
             return $this->respond(['error' => $errors], Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -186,11 +178,6 @@ class FoodApiController extends AbstractApiController
 
         $this->foodRepository->remove($food, true);
 
-        $data = [
-            'status' => self::STATUS_SUCCESS,
-            'success' => "Food deleted successfully",
-        ];
-
-        return $this->respond($data);
+        return $this->respond(null, Response::HTTP_NO_CONTENT);
     }
 }

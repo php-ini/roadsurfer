@@ -8,33 +8,29 @@ use Roadsurfer\FoodBundle\Enum\UnitType;
 
 class UnitConverter
 {
-    public static function convertToGrams(array $item): int
+    public static function convertToGrams(UnitType $unitType, int $quantity): int
     {
-        $unitType = UnitType::tryFrom($item['unit']);
-
-        if (!is_int($item['quantity']) || $item['quantity'] <= 0) {
+        if ($quantity <= 0) {
             throw new \InvalidArgumentException('Invalid unit type quantity');
         }
 
         if ($unitType === UnitType::Kilogram) {
-            $item['quantity'] *= 1000;
+            $quantity *= 1000;
         }
 
-        return $item['quantity'];
+        return $quantity;
     }
 
-    public static function convertToKilograms(array $item): float
+    public static function convertToKilograms(UnitType $unitType, int $quantity): float
     {
-        $unitType = $item['unit'];
-
-        if (!is_int($item['quantity']) || $item['quantity'] <= 0) {
+        if ($quantity <= 0) {
             throw new \InvalidArgumentException('Invalid unit type quantity');
         }
 
         if ($unitType === UnitType::Gram) {
-            $item['quantity'] /= 1000;
+            $quantity /= 1000;
         }
 
-        return $item['quantity'];
+        return $quantity;
     }
 }

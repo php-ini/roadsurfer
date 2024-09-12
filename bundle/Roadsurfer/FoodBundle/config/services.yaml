@@ -29,6 +29,10 @@ services:
 
     Roadsurfer\FoodBundle\Factory\FoodFactory: ~
 
+    Roadsurfer\FoodBundle\Factory\FoodDtoFactory: ~
+
+    Roadsurfer\FoodBundle\Factory\FoodEntityFactory: ~
+
     Roadsurfer\FoodBundle\Service\FoodService: ~
 
 

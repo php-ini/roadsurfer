@@ -6,8 +6,9 @@ namespace Roadsurfer\FoodBundle\Collection;
 
 use Roadsurfer\FoodBundle\Dto\FruitsDto;
 use Roadsurfer\FoodBundle\Dto\FoodDtoInterface;
+use Traversable;
 
-class FruitsCollection extends FoodCollection
+final class FruitsCollection extends FoodCollection
 {
     #[\Override]
     public function add(FoodDtoInterface $item): void

@@ -14,24 +14,13 @@ final class FoodFactory
     public function create(array $food): Food
     {
         $newFood = new Food();
-        $foodQuantity = UnitConverter::convertToGrams($food);
-
-        $foodType = FoodType::tryFrom($food['type']);
-
-        if ($foodType === null) {
-            throw new \InvalidArgumentException('Invalid food type: ' . $food['type']);
-        }
-
-        $unitType = UnitType::tryFrom($food['unit']);
-
-        if ($unitType === null) {
-            throw new \InvalidArgumentException('Invalid food type: ' . $food['unit']);
-        }
+        $foodQuantity = UnitConverter::convertToGrams(UnitType::from($food['unit']), $food['quantity']);
 
         $newFood->setName($food['name']);
         $newFood->setType(FoodType::from($food['type']));
         $newFood->setQuantity($foodQuantity);
         $newFood->setUnit(UnitType::Gram);
+        $newFood->setCreatedAt(new \DateTimeImmutable());
 
         return $newFood;
     }

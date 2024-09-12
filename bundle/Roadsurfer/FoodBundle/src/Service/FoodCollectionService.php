@@ -4,59 +4,31 @@ declare(strict_types=1);
 
 namespace Roadsurfer\FoodBundle\Service;
 
+use Roadsurfer\FoodBundle\Collection\FoodCollection;
 use Roadsurfer\FoodBundle\Dto\FruitsDto;
-use Roadsurfer\FoodBundle\Enum\FoodType;
 use Roadsurfer\FoodBundle\Dto\VegetablesDto;
-use Roadsurfer\FoodBundle\Util\UnitConverter;
-use Roadsurfer\FoodBundle\Collection\FruitsCollection;
-use Roadsurfer\FoodBundle\Collection\VegetablesCollection;
+use Roadsurfer\FoodBundle\Factory\FoodEntityFactory;
+use Roadsurfer\FoodBundle\Repository\FoodRepository;
 
 readonly class FoodCollectionService
 {
     public function __construct(
-        private FruitsCollection     $fruitsCollection,
-        private VegetablesCollection $vegetablesCollection
+        private FoodRepository    $foodRepository,
+        private FoodEntityFactory $foodEntityFactory,
     )
     {
     }
 
-    public function processJson(array $items): void
+    public function insert(FoodCollection $collection): void
     {
-        foreach ($items as $item) {
-            $itemType = FoodType::tryFrom($item['type']);
+        foreach ($collection->list() as $item) {
 
-            switch ($itemType) {
-                case FoodType::Fruit:
-
-                    $fruitsDto = new FruitsDto(
-                        $item['id'],
-                        $item['name'],
-                        UnitConverter::convertToGrams($item),
-                        $item['unit']
-                    );
-                    $this->fruitsCollection->add($fruitsDto);
-                    break;
-                case FoodType::Vegetable:
-
-                    $vegetableDto = new VegetablesDto(
-                        $item['id'],
-                        $item['name'],
-                        UnitConverter::convertToGrams($item),
-                        $item['unit']
-                    );
-                    $this->vegetablesCollection->add($vegetableDto);
-                    break;
+            if (!$item instanceof FruitsDto && !$item instanceof VegetablesDto) {
+                throw new \InvalidArgumentException('Invalid food type');
             }
+
+            $food = $this->foodEntityFactory->createFromFoodDto($item);
+            $this->foodRepository->save($food);
         }
-    }
-
-    public function getFruits(): array
-    {
-        return $this->fruitsCollection->list();
-    }
-
-    public function getVegetables(): array
-    {
-        return $this->vegetablesCollection->list();
     }
 }

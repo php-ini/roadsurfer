@@ -11,12 +11,12 @@ use Roadsurfer\FoodBundle\Util\UnitConverter;
 
 class FoodResponseDtoTransformer extends AbstractResponseDtoTransformer
 {
-    public function transformFromObject(Food $food, string $unit = 'g'): FoodsResponseDto
+    public function transformFromObject(Food $food, UnitType $unit = UnitType::Gram): FoodsResponseDto
     {
         $quantity = $food->getQuantity();
 
-        if ($unit === 'kg') {
-            $quantityInKG = UnitConverter::convertToKilograms($food->toArray());
+        if (UnitType::Kilogram === $unit) {
+            $quantityInKG = UnitConverter::convertToKilograms($food->getUnit(), $quantity);
             $quantity = $quantityInKG;
         }
 
@@ -25,7 +25,7 @@ class FoodResponseDtoTransformer extends AbstractResponseDtoTransformer
         $dto->name = $food->getName();
         $dto->type = $food->getType();
         $dto->quantity = $quantity;
-        $dto->unit = UnitType::tryfrom($unit) ?? UnitType::Gram;
+        $dto->unit = $unit ?? UnitType::Gram;
 
         $dto->createdAt = $food->getCreatedAt()->format('Y-m-d H:i:s');
 

@@ -4,16 +4,48 @@ declare(strict_types=1);
 
 namespace Roadsurfer\FoodBundle\Dto;
 
-use Doctrine\ORM\Cache\Exception\FeatureNotImplemented;
+use Roadsurfer\FoodBundle\Enum\FoodType;
+use Roadsurfer\FoodBundle\Enum\UnitType;
+use Symfony\Component\Validator\Constraints as Assert;
 
 abstract class FoodDto implements FoodDtoInterface
 {
+    /**
+     * @Assert\NotBlank
+     * @Assert\Type("integer")
+     */
+    private readonly int $id;
+
+    /**
+     * @Assert\NotBlank
+     * @Assert\Type("string")
+     * @Assert\Length(min=2, max=255)
+     */
+    private readonly string $name;
+
+    /**
+     * @Assert\NotBlank
+     * @Assert\Type("integer")
+     * @Assert\Positive
+     */
+    private readonly int $quantity;
+
+    /**
+     * @Assert\NotBlank
+     * @Assert\Type("enum")
+     */
+    private readonly UnitType $unit;
+
     public function __construct(
-        private readonly int    $id,
-        private readonly string $name,
-        private readonly int  $quantity,
-        private readonly string $unit
+        int $id,
+        string $name,
+        int $quantity,
+        UnitType $unit
     ) {
+        $this->id = $id;
+        $this->name = $name;
+        $this->quantity = $quantity;
+        $this->unit = $unit;
     }
 
     public function getId(): int
@@ -31,11 +63,10 @@ abstract class FoodDto implements FoodDtoInterface
         return $this->quantity;
     }
 
-    public function getUnit(): string
+    public function getUnit(): UnitType
     {
         return $this->unit;
     }
 
-    abstract public function getType(): string;
-
+    abstract public function getType(): FoodType;
 }

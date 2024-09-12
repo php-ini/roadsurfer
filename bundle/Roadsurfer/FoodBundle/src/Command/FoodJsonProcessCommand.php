@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Roadsurfer\FoodBundle\Command;
 
 use Roadsurfer\FoodBundle\Service\FoodCollectionService;
+use Roadsurfer\FoodBundle\Service\FoodService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -26,7 +27,8 @@ class FoodJsonProcessCommand extends Command
 
     public function __construct(
         private readonly FoodCollectionService $foodCollectionService,
-        private readonly ParameterBagInterface $parameterBag
+        private readonly ParameterBagInterface $parameterBag,
+        private readonly FoodService $foodService
     )
     {
         parent::__construct();
@@ -63,11 +65,11 @@ class FoodJsonProcessCommand extends Command
             return Command::FAILURE;
         }
 
-        $this->foodCollectionService->processJson($jsonData);
+        [$fruitCollection, $vegetablesCollection] = $this->foodService->processJson($jsonData);
 
         if ($input->getOption('output')) {
-            $fruits = $this->foodCollectionService->getFruits();
-            $vegetables = $this->foodCollectionService->getVegetables();
+            $fruits = $fruitCollection->list();
+            $vegetables = $vegetablesCollection->list();
             $io->success('Fruits and Vegetables processed successfully.');
             $io->listing([
                 'Fruits: ' . count($fruits),
