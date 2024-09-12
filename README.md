@@ -93,6 +93,9 @@ Ensure that you have the following installed on your machine:
 ### Base URL
     http://localhost:8000/api/v1
 
+### The json import command:
+    php bin/console app:import-foods
+
 ### Endpoints
 
 #### 1. Get All Foods

@@ -9,7 +9,7 @@ use Roadsurfer\FoodBundle\Enum\FoodType;
 use Roadsurfer\FoodBundle\Enum\UnitType;
 use Roadsurfer\FoodBundle\Util\UnitConverter;
 
-final class FoodFactory
+class FoodFactory
 {
     public function create(array $food): Food
     {
