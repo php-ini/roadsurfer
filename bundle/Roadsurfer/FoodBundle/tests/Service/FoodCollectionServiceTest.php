@@ -4,9 +4,11 @@ namespace Roadsurfer\FoodBundle\Tests\Service;
 
 use PHPUnit\Framework\TestCase;
 use Roadsurfer\FoodBundle\Collection\FoodCollection;
+use Roadsurfer\FoodBundle\Collection\FruitsCollection;
 use Roadsurfer\FoodBundle\Dto\FruitsDto;
 use Roadsurfer\FoodBundle\Dto\VegetablesDto;
 use Roadsurfer\FoodBundle\Entity\Food;
+use Roadsurfer\FoodBundle\Enum\UnitType;
 use Roadsurfer\FoodBundle\Factory\FoodEntityFactory;
 use Roadsurfer\FoodBundle\Repository\FoodRepository;
 use Roadsurfer\FoodBundle\Service\FoodCollectionService;
@@ -29,7 +31,7 @@ class FoodCollectionServiceTest extends TestCase
         $fruitsDto = new FruitsDto(1, 'Apple', 10, UnitType::Kilogram);
         $vegetablesDto = new VegetablesDto(2, 'Carrot', 5, UnitType::Gram);
 
-        $collection = new FoodCollection([$fruitsDto, $vegetablesDto]);
+        $collection = new FruitsCollection([$fruitsDto]);
 
         $food1 = new Food();
         $food2 = new Food();
@@ -50,7 +52,7 @@ class FoodCollectionServiceTest extends TestCase
         $this->expectExceptionMessage('Invalid food type');
 
         $invalidDto = $this->createMock(FruitsDto::class);
-        $collection = new FoodCollection([$invalidDto]);
+        $collection = new FruitsCollection([$invalidDto]);
 
         $this->foodCollectionService->insert($collection);
     }
