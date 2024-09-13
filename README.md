@@ -94,7 +94,7 @@ Ensure that you have the following installed on your machine:
     http://localhost:8000/api/v1
 
 ### The json import command:
-    php bin/console app:import-foods
+    php bin/console roadsurfer:import-json
 
 ### Endpoints
 
